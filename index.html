@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.66.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="alternate" href="index.xml" type="application/rss+xml" title="SpeechResearch">
+<title>Speak with a Fine Accent: Text-to-Speech Synthesis with Controllable Accent and its Intensity</title>
+</head>
+<body>
+
+<div class="container">
+	<main role="main">
+		<article>
+      
+      <h3 class="title">Speak with a Fine Accent: Text-to-Speech Synthesis with Controllable Accent and its Intensity</h3>
+      
+      <p class="authors"><strong>anonymous</strong></p>
+      <div class="abstract">
+        <p><strong>Abstract</strong><br>
+          Accented text-to-speech (TTS) synthesis seeks to generate speech in the primary language (L1) with an accent in the second language (L2). Accented TTS synthesis is challenging as L2-accented speech may vary in speaking style more than the L1 speech. Furthermore, the control of accent intensity in an utterance is the key to accent rendering. In this work, we propose a neural TTS solution with controllable accent and its intensity, that is referred to as CAI-TTS system. The CAI-TTS system employs three novel mechanisms: 1) a novel accent variance adaptor to model the complex accent variance with three controlling factors, that are related to prosody, namely pitch, energy and duration; 2) an elegant accent intensity learning strategy to quantify the accent intensity; 3) a novel consistency constraint module to encourage the TTS system to render the expected accent intensity at a fine level. Experiments show that the CAI-TTS system attains superior performance to the baseline models in terms of accent rendering and intensity control. To our best knowledge, this is the first study of accented TTS synthesis with explicit intensity control. </p>
+      </div>
+
+   
+
+    
+		
+      <h4 class="section">Contents</h4>
+      <div>
+        <b><a href="#4.4-5">(Section 4.4 & 4.5) Audio Quality of Accented TTS Synthesis & Accent Variance Learning</a></b><br>
+        <a href="#4-45-1" style="margin: 40px;">1. L1 Speech Generation</a><br>
+        <a href="#4-45-2" style="margin: 40px;">2. Main Results</a><br>
+        <b><a href="#4.6">(Section 4.6) Controllable Accent Intensity</a></b><br>
+      </div>
+
+
+      <p id="4.4-5"></p>
+      <h4 class="section">(Section 4.4 & 4.5) Audio Quality of Accented TTS Synthesis & Accent Variance Learning</h4>
+      <h5 id="4-45-1">1. L1 Speech Generation</h5>
+
+      <!-- (1) -->
+      <p class="transcript"><em> Author of the danger trail Philip Steels etc. </em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>Synthesized L1 Speech</th>
+        <th>L2 Speech (GT)</th>
+        <th> </th>
+        </tr></thead>
+        <!-- Hindi, Korean, Mandarin, Spanish, Arabic and Vietnamese -->
+        <tbody>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0001_ABA.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0001_ABA.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: ABA; Accent: Arabic)</td>
+        </tr>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0001_ASI.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0001_ASI.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: ASI; Accent: Hindi)</td>
+        </tr>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0001_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0001_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: EBVS; Accent: Spanish)</td>
+        </tr>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0001_HKK.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0001_HKK.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: HKK; Accent: Korean)</td>
+        </tr>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0001_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0001_NCC.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: NCC; Accent: Mandarin)</td>
+        </tr>
+      </table>
+      <!-- (2) -->
+      <p class="transcript"><em> Will we ever forget it ? </em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>Synthesized L1 Speech</th>
+        <th>L2 Speech (GT)</th>
+        <th> </th>
+        </tr></thead>
+        
+        <tbody>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0005_HQTV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0005_HQTV.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: HQTV; Accent: Vietnamese)</td>
+        </tr>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0005_LXC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0005_LXC.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td> (Speaker: LXC; Accent: Mandarin)</td>
+        </tr>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0005_NJS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0005_NJS.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: NJS; Accent: Spanish)</td>
+        </tr>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0005_SKA.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0005_SKA.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: SKA; Accent: Arabic)</td>
+        </tr>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0005_YDCK.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0005_YDCK.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td><td>(Speaker: YDCK; Accent: Korean)</td>
+        </tr>
+      </table>
+
+      <!-- (3) -->
+      <p class="transcript"><em> He was a head shorter than his companion of almost delicate physique. </em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>Synthesized L1 Speech</th>
+        <th>L2 Speech (GT)</th>
+        <th></th>
+        </tr></thead>
+        
+        <tbody>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0013_BWC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0013_BWC.wav" autoplay/>Your browser does not support the audio element.</audio>
+            </td><td>(Speaker: BWC; Accent: Mandarin)</td>
+          </tr>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0013_RRBI.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0013_RRBI.wav" autoplay/>Your browser does not support the audio element.</audio>
+            </td><td>(Speaker: RRBI; Accent: Hindi)</td>
+          </tr>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0013_TLV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0013_TLV.wav" autoplay/>Your browser does not support the audio element.</audio>
+            </td><td>(Speaker: TLV; Accent: Vietnamese)</td>
+          </tr>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0013_TNI.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0013_TNI.wav" autoplay/>Your browser does not support the audio element.</audio>
+            </td><td>(Speaker: TNI; Accent: Hindi)</td>
+          </tr>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-1/L1/arctic_a0013_YKWK.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-1/L2/arctic_a0013_YKWK.wav" autoplay/>Your browser does not support the audio element.</audio>
+            </td><td>(Speaker: YKWK; Accent: Korean)</td>
+          </tr>
+      </table>
+       
+
+
+
+
+      <h5 id="4-45-2">2. Main Results</h5>
+
+      <!-- (1) -->
+      <p class="transcript"><em> A moment before, he was intoxicated by a joy that was almost madness. <br> (Speaker: EBVS; Accent: Spanish)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>GT</th>
+        <th>GT (mel+HiFi-GAN)</th>
+        <th>Tacotron2 (mel+HiFi-GAN)</th>
+        <th>Transformer TTS (mel+HiFi-GAN)</th>
+        <th>FastSpeech2 (mel+HiFi-GAN)</th>
+        <th>CAI-TTS (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o phoneme pitch & energy (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o accent intensity (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o consistency constraint (mel+HiFi-GAN)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td><audio controls="controls"><source src="audios/4-45-2/GT/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-2/GT_mel/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-2/T2/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-2/TT/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-2/FS2/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+          <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS.wav" autoplay/>Your browser does not support the audio element.</audio></td>  
+        </tr>
+      </table>
+
+
+      <!-- (2) -->
+      <p class="transcript"><em> Among my minor afflictions, I may mention a new and mysterious one. <br> (Speaker: PNV; Accent: Vietnamese)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>GT</th>
+        <th>GT (mel+HiFi-GAN)</th>
+        <th>Tacotron2 (mel+HiFi-GAN)</th>
+        <th>Transformer TTS (mel+HiFi-GAN)</th>
+        <th>FastSpeech2 (mel+HiFi-GAN)</th>
+        <th>CAI-TTS (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o phoneme pitch & energy (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o accent intensity (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o consistency constraint (mel+HiFi-GAN)</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-2/GT/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/GT_mel/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/T2/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/TT/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/FS2/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/Among_my_minor_afflictions_I_may_mention_a_new_and_mysterious_one_PNV.wav" autoplay/>Your browser does not support the audio element.</audio></td>  
+          </tr>
+      </table>
+
+
+
+      <!-- (3) -->
+      <p class="transcript"><em> By that answer my professional medical prestige stood or fell <br> (Speaker: MBMPS; Accent: Spanish)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>GT</th>
+        <th>GT (mel+HiFi-GAN)</th>
+        <th>Tacotron2 (mel+HiFi-GAN)</th>
+        <th>Transformer TTS (mel+HiFi-GAN)</th>
+        <th>FastSpeech2 (mel+HiFi-GAN)</th>
+        <th>CAI-TTS (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o phoneme pitch & energy (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o accent intensity (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o consistency constraint (mel+HiFi-GAN)</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-2/GT/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/GT_mel/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/T2/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/TT/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/FS2/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/By_that_answer_my_professional_medical_prestige_stood_or_fell_MBMPS.wav" autoplay/>Your browser does not support the audio element.</audio></td>  
+          </tr>
+      </table>
+
+
+      <!-- (4) -->
+      <p class="transcript"><em> Unconsciously, our yells and exclamations yielded to this rhythm. <br> (Speaker: TXHC; Accent: Mandarin)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>GT</th>
+        <th>GT (mel+HiFi-GAN)</th>
+        <th>Tacotron2 (mel+HiFi-GAN)</th>
+        <th>Transformer TTS (mel+HiFi-GAN)</th>
+        <th>FastSpeech2 (mel+HiFi-GAN)</th>
+        <th>CAI-TTS (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o phoneme pitch & energy (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o accent intensity (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o consistency constraint (mel+HiFi-GAN)</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-2/GT/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/GT_mel/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/T2/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/TT/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/FS2/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC.wav" autoplay/>Your browser does not support the audio element.</audio></td>  
+          </tr>
+      </table>
+
+
+      <!-- (5) -->
+      <p class="transcript"><em> He made no reply as he waited for Whittemore to continue. <br> (Speaker: NCC; Accent: Mandarin)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>GT</th>
+        <th>GT (mel+HiFi-GAN)</th>
+        <th>Tacotron2 (mel+HiFi-GAN)</th>
+        <th>Transformer TTS (mel+HiFi-GAN)</th>
+        <th>FastSpeech2 (mel+HiFi-GAN)</th>
+        <th>CAI-TTS (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o phoneme pitch & energy (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o accent intensity (mel+HiFi-GAN)</th>
+        <th>CAI-TTS w/o consistency constraint (mel+HiFi-GAN)</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><audio controls="controls"><source src="audios/4-45-2/GT/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/GT_mel/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/T2/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/TT/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/FS2/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+            <td><audio controls="controls"><source src="audios/4-45-2/CAI-TTS-ab1/He_made_no_reply_as_he_waited_for_Whittemore_to_continue_NCC.wav" autoplay/>Your browser does not support the audio element.</audio></td>  
+          </tr>
+      </table>
+
+
+
+
+
+
+      <!-- 4.6 -->
+      <p id="4.6"></p>
+      <h4 class="section">(Section 4.6) Controllable Accent Intensity</h4>
+      <!-- (1) -->
+      <p class="transcript"><em>A moment before, he was intoxicated by a joy that was almost madness. <br> (Speaker: EBVS; Accent: Spanish)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/A_moment_before_he_was_intoxicated_by_a_joy_that_was_almost_madness_EBVS_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        
+        </tr>
+        </tbody>
+      </table>
+
+      <!-- (2) -->
+      <p class="transcript"><em>Gregson had left the outer door slightly ajar.  <br> (Speaker: ABA; Accent: Arabic)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Gregson_had_left_the_outer_door_slightly_ajar_ABA_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        
+        </tr>
+        </tbody>
+      </table>
+
+
+
+      <!-- (3) -->
+      <p class="transcript"><em>Her own betrayal of herself was like tonic to Philip.  <br> (Speaker: NJS; Accent: Spanish)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Her_own_betrayal_of_herself_was_like_tonic_to_Philip_NJS_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        
+        </tr>
+        </tbody>
+      </table>
+
+
+      <!-- (4) -->
+      <p class="transcript"><em>I was in New York when the crash came. <br> (Speaker: ZHAA; Accent: Arabic)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/I_was_in_New_York_when_the_crash_came_ZHAA_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/I_was_in_New_York_when_the_crash_came_ZHAA_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        
+        </tr>
+        </tbody>
+      </table>
+
+
+      <!-- (5) -->
+      <p class="transcript"><em>Unconsciously, our yells and exclamations yielded to this rhythm. <br> (Speaker: TXHC; Accent: Mandarin)</em></p>
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead style="border-bottom: 1px solid #E1E1E1;"><tr>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.1)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.2)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.3)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.4)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.5)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.6)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.7)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.8)</th>
+        <th>CAI-TTS w/o consistency constraint <br>(accent intensity = 0.9)</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.1_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.1_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.2_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.2_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.3_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.3_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.4_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.4_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.5_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.5_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.6_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.6_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.7_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.7_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.8_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.8_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+          <td>
+            <img src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.9_900000.png" width="100%">
+            <audio controls="controls"><source src="audios/4-6/CAI-TTS-ab3/Unconsciously_our_yells_and_exclamations_yielded_to_this_rhythm_TXHC_0.9_900000.wav" autoplay/>Your browser does not support the audio element.</audio>
+          </td>
+        
+        </tr>
+        </tbody>
+      </table>
+
+
+
+
+		</article>
+	</main>
+
+
+</div>
+
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-139981676-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+         HTML: ["input/TeX","output/HTML-CSS"],
+         TeX: {
+                Macros: {
+                         bm: ["\\boldsymbol{#1}", 1],
+                         argmax: ["\\mathop{\\rm arg\\,max}\\limits"],
+                         argmin: ["\\mathop{\\rm arg\\,min}\\limits"]},
+                extensions: ["AMSmath.js","AMSsymbols.js"],
+                equationNumbers: { autoNumber: "AMS" } },
+         extensions: ["tex2jax.js"],
+         jax: ["input/TeX","output/HTML-CSS"],
+         tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                    processEscapes: true },
+         "HTML-CSS": { availableFonts: ["TeX"],
+                       linebreaks: { automatic: true } }
+     });
+ </script>
+
+ <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+       tex2jax: {
+         skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+       }
+     });
+ </script>
+
+ <script type="text/javascript" async
+   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+ </script>
+
+</body>
+</html>
