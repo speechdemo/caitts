@@ -18,12 +18,13 @@
 	<main role="main">
 		<article>
       
-      <h3 class="title">Speak with a Fine Accent: Text-to-Speech Synthesis with Controllable Accent and its Intensity</h3>
+      <h3 class="title">Controllable Accented Text-to-Speech Synthesis</h3>
       
-      <p class="authors"><strong>anonymous</strong></p>
+      <p class="authors"><strong>Rui Liu,  Berrak Sisman, Guanglai Gao, Haizhou Li</strong></p>
       <div class="abstract">
         <p><strong>Abstract</strong><br>
-          Accented text-to-speech (TTS) synthesis seeks to generate speech in the primary language (L1) with an accent in the second language (L2). Accented TTS synthesis is challenging as L2-accented speech may vary in speaking style more than the L1 speech. Furthermore, the control of accent intensity in an utterance is the key to accent rendering. In this work, we propose a neural TTS solution with controllable accent and its intensity, that is referred to as CAI-TTS system. The CAI-TTS system employs three novel mechanisms: 1) a novel accent variance adaptor to model the complex accent variance with three controlling factors, that are related to prosody, namely pitch, energy and duration; 2) an elegant accent intensity learning strategy to quantify the accent intensity; 3) a novel consistency constraint module to encourage the TTS system to render the expected accent intensity at a fine level. Experiments show that the CAI-TTS system attains superior performance to the baseline models in terms of accent rendering and intensity control. To our best knowledge, this is the first study of accented TTS synthesis with explicit intensity control. </p>
+          
+	      Accented text-to-speech (TTS) synthesis seeks to generate speech with an accent (L2) as a variant of the standard version (L1). Accented TTS synthesis is challenging as L2 is different from L1 in both in terms of phonetic rendering and prosody pattern. Furthermore, there is no easy solution to the control of the accent intensity in an utterance. In this work, we propose a  neural TTS architecture, that allows us to control the accent and its intensity during inference. This is achieved through three novel mechanisms, 1) an accent variance adaptor to model the complex accent variance with three prosody controlling factors, namely pitch, energy and duration; 2) an  accent intensity modeling strategy to quantify the accent intensity; 3) a consistency constraint module to encourage the TTS system to render the expected accent intensity at a fine level. Experiments show that the proposed system attains superior performance to the baseline models in terms of accent rendering and intensity control. To our best knowledge, this is the first study of accented TTS synthesis with explicit intensity control.</p>
       </div>
 
    
@@ -32,16 +33,16 @@
 		
       <h4 class="section">Contents</h4>
       <div>
-        <b><a href="#4.4-5">(Section 4.4 & 4.5) Audio Quality of Accented TTS Synthesis & Accent Variance Learning</a></b><br>
-        <a href="#4-45-1" style="margin: 40px;">1. L1 Speech Generation</a><br>
-        <a href="#4-45-2" style="margin: 40px;">2. Main Results</a><br>
-        <b><a href="#4.6">(Section 4.6) Controllable Accent Intensity</a></b><br>
+        <b><a href="#4.4-5">(Section IV-D & IV-E) Audio Quality of Generated L1 Speech & Audio Quality of CAI-TTS</a></b><br>
+        <a href="#4-45-1" style="margin: 40px;">1. Audio Quality of Generated L1 Speech</a><br>
+        <a href="#4-45-2" style="margin: 40px;">2. Audio Quality of CAI-TTS</a><br>
+        <b><a href="#4.6">(Section IV-G) Controllable Accent Intensity</a></b><br>
       </div>
 
 
       <p id="4.4-5"></p>
-      <h4 class="section">(Section 4.4 & 4.5) Audio Quality of Accented TTS Synthesis & Accent Variance Learning</h4>
-      <h5 id="4-45-1">1. L1 Speech Generation</h5>
+      <h4 class="section">(Section IV-D & IV-E) Audio Quality of Accented TTS Synthesis & Accent Variance Learning</h4>
+      <h5 id="4-45-1">1. Audio Quality of Generated L1 Speech</h5>
 
       <!-- (1) -->
       <p class="transcript"><em> Author of the danger trail Philip Steels etc. </em></p>
@@ -157,7 +158,7 @@
 
 
 
-      <h5 id="4-45-2">2. Main Results</h5>
+      <h5 id="4-45-2">2. Audio Quality of CAI-TTS</h5>
 
       <!-- (1) -->
       <p class="transcript"><em> A moment before, he was intoxicated by a joy that was almost madness. <br> (Speaker: EBVS; Accent: Spanish)</em></p>
@@ -311,7 +312,7 @@
 
       <!-- 4.6 -->
       <p id="4.6"></p>
-      <h4 class="section">(Section 4.6) Controllable Accent Intensity</h4>
+      <h4 class="section">(Section IV-G) Controllable Accent Intensity</h4>
       <!-- (1) -->
       <p class="transcript"><em>A moment before, he was intoxicated by a joy that was almost madness. <br> (Speaker: EBVS; Accent: Spanish)</em></p>
       <table>
